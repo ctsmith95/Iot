@@ -1,0 +1,28 @@
+{
+  "name": "Iot",
+  "version": "1.0.0",
+  "description": "IoT sensor data analytics through OpenHAB and influxDB",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ctsmith95/Iot.git"
+  },
+  "keywords": [
+    "IoT",
+    "OpenHAB",
+    "influxDB",
+    "node.js"
+  ],
+  "author": "ctsmith95,daphillips1",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ctsmith95/Iot/issues"
+  },
+  "homepage": "https://github.com/ctsmith95/Iot",
+  "dependencies": {
+    "express": "^4.13.0"
+  }
+}
