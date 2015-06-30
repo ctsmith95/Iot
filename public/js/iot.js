@@ -26,18 +26,18 @@ function Iot(){
       }
       var instance = this;
       $('#data-view').load('templates/dataView.html',function(){
-        var startData = instance.getPoint("value",instance.tempSensors[0]);
-        var temperature = startData.points[0][2];
-        var tempTime =  startData.points[0][0];
-        var sensorNumber = instance.tempSensors[0].match(/(\d+)/)[0];
-        var motionData = instance.getPoint("value","Motion"+sensorNumber);
-        var status = motionData.points[0][2];
-        var statusTime = motionData.points[0][0];
-        var batteryData = instance.getPoint("value","Battery"+sensorNumber);
-        var batteryAmount = batteryData.points[0][2];
-        var batteryTime = batteryData.points[0][0];
-        var mostRecent = Math.max(parseFloat(tempTime),parseFloat(statusTime),parseFloat(batteryTime));
-        var updateTime = new Date(mostRecent);
+        var startData = instance.getPoint("value",instance.tempSensors[0]),
+            temperature = startData.points[0][2],
+            tempTime =  startData.points[0][0],
+            sensorNumber = instance.tempSensors[0].match(/(\d+)/)[0],
+            motionData = instance.getPoint("value","Motion"+sensorNumber),
+            status = motionData.points[0][2],
+            statusTime = motionData.points[0][0],
+            batteryData = instance.getPoint("value","Battery"+sensorNumber),
+            batteryAmount = batteryData.points[0][2],
+            batteryTime = batteryData.points[0][0],
+            mostRecent = Math.max(parseFloat(tempTime),parseFloat(statusTime),parseFloat(batteryTime)),
+            updateTime = new Date(mostRecent);
         updateTime = updateTime.toString();
 
         $('#temp').text(temperature+"°C");
@@ -55,18 +55,18 @@ function Iot(){
 
       $('#data-list').on('click','.sensor',function(event){
 
-        var startData = instance.getPoint("value",event.target.dataset.name);
-        var temperature = startData.points[0][2];
-        var tempTime =  startData.points[0][0];
-        var sensorNumber = event.target.dataset.name.match(/(\d+)/)[0];
-        var motionData = instance.getPoint("value","Motion"+sensorNumber);
-        var status = motionData.points[0][2];
-        var statusTime = motionData.points[0][0];
-        var batteryData = instance.getPoint("value","Battery"+sensorNumber);
-        var batteryAmount = batteryData.points[0][2];
-        var batteryTime = batteryData.points[0][0];
-        var mostRecent = Math.max(parseFloat(tempTime),parseFloat(statusTime),parseFloat(batteryTime));
-        var updateTime = new Date(mostRecent)
+        var startData = instance.getPoint("value",event.target.dataset.name),
+            temperature = startData.points[0][2],
+            tempTime =  startData.points[0][0],
+            sensorNumber = event.target.dataset.name.match(/(\d+)/)[0],
+            motionData = instance.getPoint("value","Motion"+sensorNumber),
+            status = motionData.points[0][2],
+            statusTime = motionData.points[0][0],
+            batteryData = instance.getPoint("value","Battery"+sensorNumber),
+            batteryAmount = batteryData.points[0][2],
+            batteryTime = batteryData.points[0][0],
+            mostRecent = Math.max(parseFloat(tempTime),parseFloat(statusTime),parseFloat(batteryTime)),
+            updateTime = new Date(mostRecent);
         updateTime = updateTime.toString();
 
         $('#temp').text(temperature+"°C");
@@ -79,10 +79,6 @@ function Iot(){
         $('#battery').text("Battery:"+batteryAmount+"%");
         $('#updated').text("Last Updated: "+updateTime);
       });
-
-
-
-
 
 
       //iterate over pair of sensor names and create sensor object
