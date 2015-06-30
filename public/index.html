@@ -2,19 +2,28 @@
 <html>
   <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href ="styles/view_container.css">
+    <link rel="stylesheet" href ="styles/dataview.css">
 
-    <title>IoT</title>
+    <title>senseHub</title>
   </head>
   <body>
-  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-  <!--<script type="text/javascript" src="http://get.influxdb.org/influxdb-latest.js"></script>-->
-  <script type="text/javascript" src="js/sensor.js"></script>
-  <script type="text/javascript" src="js/iot.js"></script>
 
-  <button id="read" type="button" class="btn btn-default btn-lg">
-      <span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
-  </button>
-  <div id = "textbox">
-  </div>
+    <div id = "view-container-header"><h1 id = "title">senseHub</h1></div>
+    <div id = "view-container">
+      <div class = "col-md-9" id = "data-container">
+      <div  class = "col-md-12 well " id = "data-view"></div>
+      <div class = "col-md-12 well" id = "data-nav">
+        <div class = "navbar-header">
+          
+        </div>
+      </div>
+    </div>
+      <div  class = "col-md-3 well" id = "data-list"></div>
+
+    </div>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="js/sensor.js"></script>
+    <script type="text/javascript" src="js/iot.js"></script>
   </body>
 </html>
