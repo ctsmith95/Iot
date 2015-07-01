@@ -26,14 +26,20 @@
         <!-- Table View -->
         <div class = "sense-view" id = "table-view" style="display:none;">
           <h2 id = "tableName"></h2>
-          <table class = "table table-bordered" id = "temperature-table">
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>Temperature</th>
-              </tr>
-            </thead>
-          </table>
+          <div id = "temperature-table-container">
+            <table class = "table table-bordered" id = "temperature-table">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Temperature</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+          <div id = "motion-table-container">
+            <h2 id = "tableName2"></h2>
+            <table class = "table table-bordered" id = "motion-table"></table>
+          </div>
         </div>
 
         <!-- Graph View -->

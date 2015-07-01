@@ -54,6 +54,7 @@ function Iot(){
   this.hideAllViews = function(){
     $('.sense-view').hide("fast");
     $("#temperature-table").hide();
+    $('#motion-table').hide();
   };
   this.loadDefault = function(){
     this.loadView(this.default);
@@ -155,9 +156,13 @@ function Iot(){
 
   };
 
+
+//TODO clean this up!!!
   this.updateTableView = function(sensorName) {
     var allDataRaw = instance.getData("value",instance.selectedNode),
-        allData = [];
+        allData = [],
+        allMotionRaw = instance.getData("value","Motion"+instance.getSensorNumber(instance.selectedNode)),
+        allMotion = [];
 
     //parse only needed pieces of data (time and temperature)
     allDataRaw.forEach(function(element, index, array) {
@@ -165,7 +170,23 @@ function Iot(){
       var temp = [time, element[2]];
       allData.push(temp);
     });
-    $('#tableName').text("Sensor: " + sensorName);
+
+
+    allMotionRaw.forEach(function(element, index, array) {
+      var yesOrNo;
+      if (element[2] === 0) {
+        yesOrNo = 'Object Detected';
+      }
+      else {
+        yesOrNo = 'Clear';
+      }
+      var time = new Date(element[0]);
+      var temp = [time, yesOrNo];
+      allMotion.push(temp);
+    });
+    //tablename is temp, ""2 is motion
+    $('#tableName').text(sensorName);
+    $('#tableName2').text("Motion"+instance.getSensorNumber(instance.selectedNode));
 
     //clear existing table (if there is one)
     $('#temperature-table').html('<thead><tr><th>Time</th><th>Temperature</th></tr></thead>');
@@ -177,6 +198,21 @@ function Iot(){
 
 
     $('#temperature-table').show();
+
+
+
+
+    $('#motion-table').html('<thead><tr><th>Time</th><th>Motion Status</th></tr></thead>');
+
+    //populate table with values
+    allMotion.forEach(function(element, index, array) {
+      $('#motion-table').append('<tr id = "table-element"><td>' + element[0] + '</td><td>' + element[1] + '</td></tr>');
+    });
+
+
+    $('#motion-table').show();
+
+
 
   };
 
@@ -193,6 +229,12 @@ function Iot(){
 
 
   };
+
+  //NOTE this will need to get resolved on the rebase
+  this.getSensorNumber = function(sensor) {
+    return sensor.match(/(\d+)/)[0];
+  };
+
   this.loadReview = function(){
     if (this.currentView == "review"){
       return;
