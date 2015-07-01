@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href ="styles/index.css">
     <link rel="stylesheet" href ="styles/nodeview.css">
+    <link rel="stylesheet" href ="styles/graphview.css">
+
 
     <title>senseHub</title>
   </head>
@@ -29,7 +31,9 @@
 
         <!-- Graph View -->
         <div class = "sense-view" id = "graph-view" style="display:none;">
-          <h1>Graph View</h1>
+          <div id = "temp-graph-container"></div>
+          <div id = "motion-graph-container"></div>
+
         </div>
 
         <!-- Review View -->
@@ -65,5 +69,6 @@
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="js/sensor.js"></script>
     <script type="text/javascript" src="js/iot.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.js"></script>
   </body>
 </html>

@@ -12,7 +12,7 @@ html, body {
   color: #777777;
 }
 #data-view{
-  background-color: #EEEEEE;
+  background-color: #FFFFFF;
   height:89%;
   border-style: solid;
   border-width: 2px;
@@ -44,7 +44,7 @@ html, body {
   margin-bottom: 0px;
 }
 #data-nav{
-  background-color: #DDDDDD;
+  background-color: #FFFFFF;
   height:10%;
   margin:0px;
   padding-top:0px;
