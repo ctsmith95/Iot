@@ -53,6 +53,7 @@ function Iot(){
 
   this.hideAllViews = function(){
     $('.sense-view').hide("fast");
+    $("#temperature-table").hide();
   };
   this.loadDefault = function(){
     this.loadView(this.default);
@@ -141,12 +142,39 @@ function Iot(){
     }
     this.hideAllViews();
     $('#table-view').show(function(){
-
+      if (instance.selectedNode === null){
+        instance.selectedNode = instance.tempSensors[0];
+        instance.updateTableView(instance.tempSensors[0]);
+      }
+      else{
+        instance.updateTableView(instance.selectedNode);
+      }
+    });
+    $('#data-list').on('click','.sensor',function(event){
+        instance.selectedNode = event.target.dataset.name;
+        instance.updateTableView(event.target.dataset.name);
     });
     this.currentView = "table";
 
+  };
+
+  this.updateTableView = function(sensorName) {
+     var startData = instance.getPoint("value",sensorName),
+         temperature = startData.points[0][2],
+         tempTime = startData.points[0][0];
+    $('#tableName').text("Sensor: " + sensorName);
+
+    //clear existing table (if there is one)
+    $('#table-element').html('');
+
+    //populate table with values
+    $('#temperature-table').append('<tr id = "table-element"><td>' + tempTime + '</td><td>' + temperature + '</td></tr>');
+
+
+    $('#temperature-table').show();
 
   };
+
   this.loadGraph = function(){
     if (this.currentView == "graph"){
       return;
