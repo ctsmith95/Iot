@@ -1,0 +1,83 @@
+html, body {
+  height: 100%;
+  min-height:100% !important;
+}
+
+#view-container-header {
+  background-color: #FFFFFF;
+
+}
+#title{
+  font-size:50px;
+  color: #AAAAAA;
+}
+#data-view{
+  background-color: #FFFFFF;
+  height:89%;
+  border-style: solid;
+  border-width: 2px;
+  border-left-width:0px;
+  border-radius: 0px;
+  padding:0px;
+  border-right-width:0px;
+  margin:0px;
+}
+#data-list{
+  background-color: #FFFFFF;
+  height:100%;
+  border-style: solid;
+  border-width: 2px;
+  border-left-width:2px;
+  border-right-width:0px;
+  border-radius: 0px;
+  padding: 0px;
+  margin-bottom: 0px;
+  overflow:auto;
+}
+#data-container{
+  padding:0px;
+  border-right-width:0px;
+  height:100%;
+}
+#view-container{
+  height:calc(100% - 55px);
+  margin-bottom: 0px;
+}
+#data-nav{
+  background-color: #DDDDDD;
+  height:10%;
+  margin:0px;
+  padding-top:0px;
+  border-radius:0px;
+  padding:0px;
+}
+#toolbar{
+  width:112%;
+  border-radius:0px;
+
+}
+.navbutton{
+  width:25%;
+}
+a.sensor{
+  padding-left: 20px;
+  font-size:30px;
+  border-left:0px;
+}
+h1{
+  padding-top: 0px;
+  padding-bottom:0px;
+  margin-top: 0px;
+  margin-bottom:0px;
+}
+.btn-xlarge {
+    padding: 18px 28px;
+    font-size: 60px;
+    line-height: normal;
+    -webkit-border-radius: 8px;
+       -moz-border-radius: 8px;
+            border-radius: 8px;
+}
+.overview-btn{
+  font-size: 70px;
+}
