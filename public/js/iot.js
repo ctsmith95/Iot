@@ -106,21 +106,18 @@ function Iot(){
 
   this.updateInspectView = function(sensorName){
 
-    var startData = instance.getPoint("value",sensorName);
-    console.log('got1');
-    var temperature = startData.points[0][2];
-    var tempTime =  startData.points[0][0];
-    var sensorNumber = sensorName.match(/(\d+)/)[0];
-    var motionData = instance.getPoint("value","Motion"+sensorNumber);
-    console.log('got2');
-    var status = motionData.points[0][2];
-    var statusTime = motionData.points[0][0];
-    var batteryData = instance.getPoint("value","Battery"+sensorNumber);
-    console.log('got3');
-    var batteryAmount = batteryData.points[0][2];
-    var batteryTime = batteryData.points[0][0];
-    var mostRecent = Math.max(parseFloat(tempTime),parseFloat(statusTime),parseFloat(batteryTime));
-    var updateTime = new Date(mostRecent);
+    var startData = instance.getPoint("value",sensorName),
+        temperature = startData.points[0][2],
+        tempTime =  startData.points[0][0],
+        sensorNumber = sensorName.match(/(\d+)/)[0],
+        motionData = instance.getPoint("value","Motion"+sensorNumber),
+        status = motionData.points[0][2],
+        statusTime = motionData.points[0][0],
+        batteryData = instance.getPoint("value","Battery"+sensorNumber),
+        batteryAmount = batteryData.points[0][2],
+        batteryTime = batteryData.points[0][0],
+        mostRecent = Math.max(parseFloat(tempTime),parseFloat(statusTime),parseFloat(batteryTime)),
+        updateTime = new Date(mostRecent);
     updateTime = updateTime.toString();
 
     $('#name').text("Sensor: "+sensorName);
@@ -159,16 +156,23 @@ function Iot(){
   };
 
   this.updateTableView = function(sensorName) {
-     var startData = instance.getPoint("value",sensorName),
-         temperature = startData.points[0][2],
-         tempTime = startData.points[0][0];
+    var allDataRaw = instance.getData("value",instance.selectedNode),
+        allData = [];
+
+    //parse only needed pieces of data (time and temperature)
+    allDataRaw.forEach(function(element, index, array) {
+      var temp = [element[0], element[2]];
+      allData.push(temp);
+    });
     $('#tableName').text("Sensor: " + sensorName);
 
     //clear existing table (if there is one)
-    $('#table-element').html('');
+    $('#temperature-table').html('<thead><tr><th>Time</th><th>Temperature</th></tr></thead>');
 
     //populate table with values
-    $('#temperature-table').append('<tr id = "table-element"><td>' + tempTime + '</td><td>' + temperature + '</td></tr>');
+    allData.forEach(function(element, index, array) {
+      $('#temperature-table').append('<tr id = "table-element"><td>' + element[0] + '</td><td>' + element[1] + '</td></tr>');
+    });
 
 
     $('#temperature-table').show();
@@ -218,6 +222,16 @@ function Iot(){
     //need to get a json handle on data
     jData = JSON.parse(data);
     return jData;
+  };
+  this.getData = function(fieldName,seriesName){
+    var jdata = this.getPoint(fieldName,seriesName);
+    var length = jdata.points.length;
+    var data = [];
+    for(var i = 0; i<length;i++){
+      data.push(jdata.points[i]);
+
+    }
+    return data;
   };
 }
 iot = new Iot();
