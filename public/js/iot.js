@@ -176,6 +176,7 @@ function Iot(){
     axisY: {
         title: "Temperature (°C)"
     },
+    zoomEnabled: true,
     data: [
     {
         type: "area",
@@ -196,6 +197,7 @@ axisX:{
     title: "timeline",
     gridThickness: 2
 },
+zoomEnabled: true, 
 axisY: {
     title: "Motion Detected"
 },
