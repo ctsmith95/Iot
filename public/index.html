@@ -2,8 +2,8 @@
 <html>
   <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href ="styles/view_container.css">
-    <link rel="stylesheet" href ="styles/dataview.css">
+    <link rel="stylesheet" href ="styles/index.css">
+    <link rel="stylesheet" href ="styles/nodeview.css">
 
     <title>senseHub</title>
   </head>
@@ -14,8 +14,22 @@
       <div class = "col-md-9" id = "data-container">
       <div  class = "col-md-12 well " id = "data-view"></div>
       <div class = "col-md-12 well" id = "data-nav">
-        <div class = "navbar-header">
-          
+        <div class = "navbar-header" >
+          <div class = "btn-group" role = "group" id = "toolbar">
+            <button type = "button" class ="btn btn-primary btn-xlarge navbutton">
+            <span class = "glyphicon glyphicon-search"></span> Inspect
+          </button>
+          <button type = "button" class ="btn btn-success btn-xlarge navbutton">
+          <span class = "glyphicon glyphicon-list-alt"></span> Table
+        </button>
+        <button type = "button" class ="btn btn-danger btn-xlarge navbutton">
+        <span class = "glyphicon glyphicon-stats"></span> Graph
+      </button>
+      <button type = "button" class ="btn btn-warning btn-xlarge navbutton">
+      <span class = "glyphicon glyphicon-th-large"></span> Review
+    </button>
+
+      </div>
         </div>
       </div>
     </div>

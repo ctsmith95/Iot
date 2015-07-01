@@ -4,105 +4,117 @@ function Iot(){
   this.xmlHttp = new XMLHttpRequest();
   this.sensors = [];
   this.tempSensors = [];
+  this.default = "inspect";
+  this.inspectView = null;
+  this.tableView = null;
+  this.graphView = null;
+  this.reView = null;
 
   this.initialize = function(){
-      //Get all sensors
-      //Load all the sensors
-
-      //Just testing
+      //Load all the sensor names
       this.xmlHttp.open('GET',"http://pi:8086/db/Iot/series?u=root&p=root&q=list series",false);
       this.xmlHttp.send(null);
       var data = this.xmlHttp.responseText;
       data = data.substring(1,data.length-1);// removes outer brackets preventing parsing
+
       //need to get a json handle on data
       jData = JSON.parse(data);
       var length = jData.points.length;
       for(var i = 0; i<length; i++){
         this.sensors.push(jData.points[i][1]);
-        if(/Temperature/.test(this.sensors[i])){
+
+        if (/Temperature/.test(this.sensors[i])){ // Check whether it is a temperature sensor or motion sensor
           this.tempSensors.push(jData.points[i][1]);
      }
 
-      }
-      var instance = this;
-      $('#data-view').load('templates/dataView.html',function(){
-        var startData = instance.getPoint("value",instance.tempSensors[0]);
-        var temperature = startData.points[0][2];
-        var tempTime =  startData.points[0][0];
-        var sensorNumber = instance.tempSensors[0].match(/(\d+)/)[0];
-        var motionData = instance.getPoint("value","Motion"+sensorNumber);
-        var status = motionData.points[0][2];
-        var statusTime = motionData.points[0][0];
-        var batteryData = instance.getPoint("value","Battery"+sensorNumber);
-        var batteryAmount = batteryData.points[0][2];
-        var batteryTime = batteryData.points[0][0];
-        var mostRecent = Math.max(parseFloat(tempTime),parseFloat(statusTime),parseFloat(batteryTime));
-        var updateTime = new Date(mostRecent);
-        updateTime = updateTime.toString();
-
-        $('#temp').text(temperature+"°C");
-        if(status === 0){
-
-          $('#status').text("Status: Clear");
-        }
-        else{
-          $('#status').text("Status: Object Detected.");
-        }
-        $('#battery').text("Battery:"+batteryAmount+"%");
-        $('#updated').text("Last Updated: "+updateTime);
-      });
-
-
-      $('#data-list').on('click','.sensor',function(event){
-
-        var startData = instance.getPoint("value",event.target.dataset.name);
-        var temperature = startData.points[0][2];
-        var tempTime =  startData.points[0][0];
-        var sensorNumber = event.target.dataset.name.match(/(\d+)/)[0];
-        var motionData = instance.getPoint("value","Motion"+sensorNumber);
-        var status = motionData.points[0][2];
-        var statusTime = motionData.points[0][0];
-        var batteryData = instance.getPoint("value","Battery"+sensorNumber);
-        var batteryAmount = batteryData.points[0][2];
-        var batteryTime = batteryData.points[0][0];
-        var mostRecent = Math.max(parseFloat(tempTime),parseFloat(statusTime),parseFloat(batteryTime));
-        var updateTime = new Date(mostRecent)
-        updateTime = updateTime.toString();
-
-        $('#temp').text(temperature+"°C");
-        if(status === 0){
-          $('#status').text("Status: Clear");
-        }
-        else{
-          $('#status').text("Status: Object Detected.");
-        }
-        $('#battery').text("Battery:"+batteryAmount+"%");
-        $('#updated').text("Last Updated: "+updateTime);
-      });
-
-
-
-
-
-
+   }
       //iterate over pair of sensor names and create sensor object
+      this.loadDefault();
 
   };
+
+  this.loadDefault = function(){
+    this.loadView(this.default);
+  };
+
+  //Pass a string to viewType to setup a certain type of view
+  this.loadView = function(viewType){
+    switch(viewType){
+      case "inspect":
+        this.loadInspect();
+        break;
+      case "table":
+        this.loadTable();
+        break;
+      case "graph":
+        this.loadGraph();
+        break;
+      case "review":
+        this.loadReview();
+        break;
+    }
+
+  };
+
+  this.loadInspect = function(){
+    var instance = this;
+    $('#data-view').load('templates/dataView.html',function(){
+      instance.updateLoadView(instance.tempSensors[0]);
+    });
+    $('#data-list').on('click','.sensor',function(event){
+        instance.updateLoadView(event.target.dataset.name);
+    });
+
+  };
+
+  this.updateLoadView = function(sensorName){
+    var instance = this;
+    var startData = instance.getPoint("value",sensorName);
+    var temperature = startData.points[0][2];
+    var tempTime =  startData.points[0][0];
+    var sensorNumber = sensorName.match(/(\d+)/)[0];
+    var motionData = instance.getPoint("value","Motion"+sensorNumber);
+    var status = motionData.points[0][2];
+    var statusTime = motionData.points[0][0];
+    var batteryData = instance.getPoint("value","Battery"+sensorNumber);
+    var batteryAmount = batteryData.points[0][2];
+    var batteryTime = batteryData.points[0][0];
+    var mostRecent = Math.max(parseFloat(tempTime),parseFloat(statusTime),parseFloat(batteryTime));
+    var updateTime = new Date(mostRecent);
+    updateTime = updateTime.toString();
+
+    $('#temp').text(temperature+"°C");
+    if(status === 0){
+
+      $('#status').text("Status: Clear");
+    }
+    else{
+      $('#status').text("Status: Object Detected.");
+    }
+    $('#battery').text("Battery:"+batteryAmount+"%");
+    $('#updated').text("Last Updated: "+updateTime);
+  };
+
+  this.loadTable = function(){
+
+  };
+  this.loadGraph = function(){
+
+  };
+  this.loadReview = function(){
+
+  };
+
 
   this.generateSensorList = function(){
     var length = this.sensors.length;
     for (var i = 0; i<length; i++){
-
-
-        if(/Temperature/.test(this.sensors[i])){
-        $('#data-list').append('<a class = "list-group-item sensor" data-name="'+this.sensors[i]+'">'+this.sensors[i]+'</a>');
+      if(/Temperature/.test(this.sensors[i])){
+        $('#data-list').append('<a class = "list-group-item sensor" data-name="'+this.sensors[i]+'">'+ '<input type="checkbox" aria-label="..." class = "data-check">  '+this.sensors[i]+'</a>');
      }
     }
   };
 
-  this.generateDataView = function(){
-
-  };
   this.getPoint = function(fieldName,seriesName){
     this.xmlHttp.open('GET',"http://pi:8086/db/Iot/series?u=root&p=root&q=select "+fieldName+" from "+seriesName,false);
     this.xmlHttp.send(null);
