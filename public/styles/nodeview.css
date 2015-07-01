@@ -1,12 +1,15 @@
 #temp{
-  font-size:500px;
+  font-size:450px;
   text-align:center;
 }
+#name{
+  font-size:80px;
+}
 #status{
-  font-size:100px;
+  font-size:80px;
 }
 #battery{
-  font-size:100px;
+  font-size:80px;
 }
 .status-clear{
   color:#3CD633 !important;

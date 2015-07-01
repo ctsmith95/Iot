@@ -9,10 +9,10 @@ html, body {
 }
 #title{
   font-size:50px;
-  color: #AAAAAA;
+  color: #777777;
 }
 #data-view{
-  background-color: #FFFFFF;
+  background-color: #EEEEEE;
   height:89%;
   border-style: solid;
   border-width: 2px;
