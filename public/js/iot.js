@@ -161,7 +161,8 @@ function Iot(){
 
     //parse only needed pieces of data (time and temperature)
     allDataRaw.forEach(function(element, index, array) {
-      var temp = [element[0], element[2]];
+      var time = new Date(element[0]);
+      var temp = [time, element[2]];
       allData.push(temp);
     });
     $('#tableName').text("Sensor: " + sensorName);
