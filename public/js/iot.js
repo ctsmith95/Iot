@@ -53,6 +53,8 @@ function Iot(){
 
   this.hideAllViews = function(){
     $('.sense-view').hide("fast");
+    $("#temperature-table").hide();
+    $('#motion-table').hide();
   };
   this.loadDefault = function(){
     this.loadView(this.default);
@@ -105,21 +107,18 @@ function Iot(){
 
   this.updateInspectView = function(sensorName){
 
-    var startData = instance.getPoint("value",sensorName);
-    console.log('got1');
-    var temperature = startData.points[0][2];
-    var tempTime =  startData.points[0][0];
-    var sensorNumber = sensorName.match(/(\d+)/)[0];
-    var motionData = instance.getPoint("value","Motion"+sensorNumber);
-    console.log('got2');
-    var status = motionData.points[0][2];
-    var statusTime = motionData.points[0][0];
-    var batteryData = instance.getPoint("value","Battery"+sensorNumber);
-    console.log('got3');
-    var batteryAmount = batteryData.points[0][2];
-    var batteryTime = batteryData.points[0][0];
-    var mostRecent = Math.max(parseFloat(tempTime),parseFloat(statusTime),parseFloat(batteryTime));
-    var updateTime = new Date(mostRecent);
+    var startData = instance.getPoint("value",sensorName),
+        temperature = startData.points[0][2],
+        tempTime =  startData.points[0][0],
+        sensorNumber = sensorName.match(/(\d+)/)[0],
+        motionData = instance.getPoint("value","Motion"+sensorNumber),
+        status = motionData.points[0][2],
+        statusTime = motionData.points[0][0],
+        batteryData = instance.getPoint("value","Battery"+sensorNumber),
+        batteryAmount = batteryData.points[0][2],
+        batteryTime = batteryData.points[0][0],
+        mostRecent = Math.max(parseFloat(tempTime),parseFloat(statusTime),parseFloat(batteryTime)),
+        updateTime = new Date(mostRecent);
     updateTime = updateTime.toString();
 
     $('#name').text("Sensor: "+sensorName);
@@ -141,12 +140,82 @@ function Iot(){
     }
     this.hideAllViews();
     $('#table-view').show(function(){
-
+      if (instance.selectedNode === null){
+        instance.selectedNode = instance.tempSensors[0];
+        instance.updateTableView(instance.tempSensors[0]);
+      }
+      else{
+        instance.updateTableView(instance.selectedNode);
+      }
+    });
+    $('#data-list').on('click','.sensor',function(event){
+        instance.selectedNode = event.target.dataset.name;
+        instance.updateTableView(event.target.dataset.name);
     });
     this.currentView = "table";
 
+  };
+
+
+//TODO clean this up!!!
+  this.updateTableView = function(sensorName) {
+    var allDataRaw = instance.getData("value",instance.selectedNode),
+        allData = [],
+        allMotionRaw = instance.getData("value","Motion"+instance.getSensorNumber(instance.selectedNode)),
+        allMotion = [];
+
+    //parse only needed pieces of data (time and temperature)
+    allDataRaw.forEach(function(element, index, array) {
+      var time = new Date(element[0]);
+      var temp = [time, element[2]];
+      allData.push(temp);
+    });
+
+
+    allMotionRaw.forEach(function(element, index, array) {
+      var yesOrNo;
+      if (element[2] === 0) {
+        yesOrNo = 'Object Detected';
+      }
+      else {
+        yesOrNo = 'Clear';
+      }
+      var time = new Date(element[0]);
+      var temp = [time, yesOrNo];
+      allMotion.push(temp);
+    });
+    //tablename is temp, ""2 is motion
+    $('#tableName').text(sensorName);
+    $('#tableName2').text("Motion"+instance.getSensorNumber(instance.selectedNode));
+
+    //clear existing table (if there is one)
+    $('#temperature-table').html('<thead><tr><th>Time</th><th>Temperature</th></tr></thead>');
+
+    //populate table with values
+    allData.forEach(function(element, index, array) {
+      $('#temperature-table').append('<tr id = "table-element"><td>' + element[0] + '</td><td>' + element[1] + '</td></tr>');
+    });
+
+
+    $('#temperature-table').show();
+
+
+
+
+    $('#motion-table').html('<thead><tr><th>Time</th><th>Motion Status</th></tr></thead>');
+
+    //populate table with values
+    allMotion.forEach(function(element, index, array) {
+      $('#motion-table').append('<tr id = "table-element"><td>' + element[0] + '</td><td>' + element[1] + '</td></tr>');
+    });
+
+
+    $('#motion-table').show();
+
+
 
   };
+
   this.loadGraph = function(){
     if (this.currentView == "graph"){
       return;
@@ -160,6 +229,12 @@ function Iot(){
 
 
   };
+
+  //NOTE this will need to get resolved on the rebase
+  this.getSensorNumber = function(sensor) {
+    return sensor.match(/(\d+)/)[0];
+  };
+
   this.loadReview = function(){
     if (this.currentView == "review"){
       return;
@@ -190,6 +265,16 @@ function Iot(){
     //need to get a json handle on data
     jData = JSON.parse(data);
     return jData;
+  };
+  this.getData = function(fieldName,seriesName){
+    var jdata = this.getPoint(fieldName,seriesName);
+    var length = jdata.points.length;
+    var data = [];
+    for(var i = 0; i<length;i++){
+      data.push(jdata.points[i]);
+
+    }
+    return data;
   };
 }
 iot = new Iot();
