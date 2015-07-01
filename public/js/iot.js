@@ -105,16 +105,13 @@ function Iot(){
   this.updateInspectView = function(sensorName){
 
     var startData = instance.getPoint("value",sensorName);
-    console.log('got1');
     var temperature = startData.points[0][2];
     var tempTime =  startData.points[0][0];
     var sensorNumber = sensorName.match(/(\d+)/)[0];
     var motionData = instance.getPoint("value","Motion"+sensorNumber);
-    console.log('got2');
     var status = motionData.points[0][2];
     var statusTime = motionData.points[0][0];
     var batteryData = instance.getPoint("value","Battery"+sensorNumber);
-    console.log('got3');
     var batteryAmount = batteryData.points[0][2];
     var batteryTime = batteryData.points[0][0];
     var mostRecent = Math.max(parseFloat(tempTime),parseFloat(statusTime),parseFloat(batteryTime));
@@ -146,18 +143,88 @@ function Iot(){
 
 
   };
+
   this.loadGraph = function(){
     if (this.currentView == "graph"){
       return;
     }
+
+    $('#data-list').on('click','.sensor',function(event){
+        instance.selectedNode = event.target.dataset.name;
+        instance.renderGraph();
+    });
     this.hideAllViews();
     $('#graph-view').show(function(){
+      instance.renderGraph();
 
     });
     this.currentView = "graph";
 
 
 
+  };
+  this.renderGraph = function(){
+    var tempChart = new CanvasJS.Chart("temp-graph-container",
+    {
+      title:{
+        text: instance.selectedNode
+    },
+    axisX:{
+        title: "timeline",
+        gridThickness: 2
+    },
+    axisY: {
+        title: "Temperature (°C)"
+    },
+    data: [
+    {
+        type: "area",
+        dataPoints: instance.formatGraphData(instance.getData("value",instance.selectedNode))
+
+
+    }
+    ]
+});
+tempChart.render();
+tempChart = {};
+var motionChart = new CanvasJS.Chart("motion-graph-container",
+{
+  title:{
+    text: "Motion"+instance.getSensorNumber(instance.selectedNode)
+},
+axisX:{
+    title: "timeline",
+    gridThickness: 2
+},
+axisY: {
+    title: "Motion Detected"
+},
+data: [
+{
+    type: "scatter",
+    dataPoints: instance.formatGraphData(instance.getData("value","Motion"+instance.getSensorNumber(instance.selectedNode)))
+
+
+}
+]
+});
+
+
+
+    motionChart.render();
+    motionChart = {};
+  };
+  this.getSensorNumber = function(sensor){
+    return sensor.match(/(\d+)/)[0];
+  };
+
+  this.formatGraphData = function(data){
+    var length = data.length;
+    var graphData = [];
+    for(var i = 0; i<length; i++){
+      graphData.push({x:new Date(data[i][0]),y:data[i][2] });
+    }
+    return graphData;
   };
   this.loadReview = function(){
     if (this.currentView == "review"){
@@ -177,7 +244,7 @@ function Iot(){
     var length = this.sensors.length;
     for (var i = 0; i<length; i++){
       if(/Temperature/.test(this.sensors[i])){
-        $('#data-list').append('<a class = "list-group-item sensor" data-name="'+this.sensors[i]+'">'+ '<input type="checkbox" aria-label="..." class = "data-check">  '+this.sensors[i]+'</a>');
+        $('#data-list').append('<a class = "list-group-item sensor" data-name="'+this.sensors[i]+'">'+this.sensors[i]+'</a>');
      }
     }
   };
@@ -190,6 +257,16 @@ function Iot(){
     //need to get a json handle on data
     jData = JSON.parse(data);
     return jData;
+  };
+  this.getData = function(fieldName,seriesName){
+    var jdata = this.getPoint(fieldName,seriesName);
+    var length = jdata.points.length;
+    var data = [];
+    for(var i = 0; i<length;i++){
+      data.push(jdata.points[i]);
+
+    }
+    return data;
   };
 }
 iot = new Iot();

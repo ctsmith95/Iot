@@ -1,0 +1,8 @@
+#temp-graph-container{
+  width:95%;
+}
+#motion-graph-container{
+  width:95%;
+  position:absolute;
+  top:450px;
+  }
