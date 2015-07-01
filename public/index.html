@@ -12,20 +12,46 @@
     <div id = "view-container-header"><h1 id = "title">senseHub</h1></div>
     <div id = "view-container">
       <div class = "col-md-9" id = "data-container">
-      <div  class = "col-md-12 well " id = "data-view"></div>
+      <div  class = "col-md-12 well " id = "data-view">
+        <!-- Inspect View -->
+        <div class = "sense-view" id = "inspect-view" style="display:none;">
+          <h2 id = "name"></h2>
+          <h1 id = "temp"></h1>
+          <h1 id = "status"></h1>
+          <h1 id = "battery"></h1>
+          <h3 id = "updated"></h3>
+        </div>
+
+        <!-- Table View -->
+        <div class = "sense-view" id = "table-view" style="display:none;">
+          <h1>Table View</h1>
+        </div>
+
+        <!-- Graph View -->
+        <div class = "sense-view" id = "graph-view" style="display:none;">
+          <h1>Graph View</h1>
+        </div>
+
+        <!-- Review View -->
+        <div class = "sense-view" id = "review-view" style="display:none;">
+          <h1>Review View</h1>
+        </div>
+
+
+      </div>
       <div class = "col-md-12 well" id = "data-nav">
         <div class = "navbar-header" >
           <div class = "btn-group" role = "group" id = "toolbar">
-            <button type = "button" class ="btn btn-primary btn-xlarge navbutton">
+            <button type = "button" class ="btn btn-primary btn-xlarge navbutton" id = "inspect">
             <span class = "glyphicon glyphicon-search"></span> Inspect
           </button>
-          <button type = "button" class ="btn btn-success btn-xlarge navbutton">
+          <button type = "button" class ="btn btn-success btn-xlarge navbutton" id = "table">
           <span class = "glyphicon glyphicon-list-alt"></span> Table
         </button>
-        <button type = "button" class ="btn btn-danger btn-xlarge navbutton">
+        <button type = "button" class ="btn btn-danger btn-xlarge navbutton" id = "graph">
         <span class = "glyphicon glyphicon-stats"></span> Graph
       </button>
-      <button type = "button" class ="btn btn-warning btn-xlarge navbutton">
+      <button type = "button" class ="btn btn-warning btn-xlarge navbutton" id = "review">
       <span class = "glyphicon glyphicon-th-large"></span> Review
     </button>
 
