@@ -21,6 +21,7 @@ html, body {
   padding:0px;
   border-right-width:0px;
   margin:0px;
+  overflow:auto;
 }
 #data-list{
   background-color: #FFFFFF;
