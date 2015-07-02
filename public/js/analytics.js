@@ -14,10 +14,10 @@ function Analytics(sensorList,dataRetriever){
       averages.push([this.sensors[i],this.getAverage(this.dataRetriever(this.sensors[i]))]);
     }
     var temp;
-    for(var i = 1;i < length; i++){
-      j = i-1;
-      temp = averages[i][1];
-      while(averages[i][1] > averages[j][1] && j >= 0){
+    for(var j = 1;j < length; j++){
+       k = j-1;
+      temp = averages[j][1];
+      while(averages[j][1] > averages[k][1] && k >= 0){
         averages[i] = averages[j];
       }
     }
