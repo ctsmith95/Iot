@@ -1,15 +1,29 @@
 
-#temperature-table-container{
-  width:95%;
+#temperature{
   padding-left:35px;
+}
+
+#motion{
+  position:absolute;
+  top:470px;
+  padding-left:35px;
+}
+
+#temperature-table-container{
+  top:55px;
+  width:98%;
+  padding-left:35px;
+  height:45% !important;
+  overflow:auto;
+  position:absolute;
+  margin-bottom:30px;
 
 }
 #motion-table-container{
-  width:95%;
-}
-#tableName{
+  width:98%;
   padding-left:35px;
-}
-#tableName2{
-  padding-left:35px;
+  position:absolute;
+  height:43% !important;
+  top:525px;
+  overflow:auto;
 }
