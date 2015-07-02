@@ -34,6 +34,7 @@ html, body {
   padding: 0px;
   margin-bottom: 0px;
   overflow:auto;
+  cursor:pointer;
 }
 #data-container{
   padding:0px;

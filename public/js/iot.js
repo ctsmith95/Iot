@@ -53,6 +53,8 @@ function Iot(){
 
   this.hideAllViews = function(){
     $('.sense-view').hide("fast");
+
+    //maybe there's a better spot for these? idk
     $("#temperature-table").hide();
     $('#motion-table').hide();
   };
@@ -157,23 +159,25 @@ function Iot(){
   };
 
 
-//TODO clean this up!!!
   this.updateTableView = function(sensorName) {
-    var allDataRaw = instance.getData("value",instance.selectedNode),
-        allData = [],
-        allMotionRaw = instance.getData("value","Motion"+instance.getSensorNumber(instance.selectedNode)),
-        allMotion = [];
+    var allTemp = [],
+        allMotion = [],
+        tempTable = '#temperature-table',
+        motionTable = '#motion-table',
+        allTempRaw = instance.getData("value",instance.selectedNode),
+        allMotionRaw = instance.getData("value","Motion"+instance.getSensorNumber(instance.selectedNode));
 
     //parse only needed pieces of data (time and temperature)
-    allDataRaw.forEach(function(element, index, array) {
+    allTempRaw.forEach(function(element, index, array) {
       var time = new Date(element[0]);
       var temp = [time, element[2]];
-      allData.push(temp);
+      allTemp.push(temp);
     });
 
-
+    //parse only time and if motion was detected or not
     allMotionRaw.forEach(function(element, index, array) {
       var yesOrNo;
+      //determine if motino was detected or not
       if (element[2] === 0) {
         yesOrNo = 'Object Detected';
       }
@@ -184,35 +188,26 @@ function Iot(){
       var temp = [time, yesOrNo];
       allMotion.push(temp);
     });
-    //tablename is temp, ""2 is motion
-    $('#tableName').text(sensorName);
-    $('#tableName2').text("Motion"+instance.getSensorNumber(instance.selectedNode));
 
-    //clear existing table (if there is one)
-    $('#temperature-table').html('<thead><tr><th>Time</th><th>Temperature</th></tr></thead>');
+    //builds the tables
+    buildTable(tempTable, allTemp);
+    buildTable(motionTable, allMotion);
 
-    //populate table with values
-    allData.forEach(function(element, index, array) {
-      $('#temperature-table').append('<tr id = "table-element"><td>' + element[0] + '</td><td>' + element[1] + '</td></tr>');
-    });
+    function buildTable(tableType, tableData){
+      if(tableType.indexOf("temperature") >= 0){
+        $('#temperature').text(sensorName);
+        $(tableType).html('<thead><tr><th>Time</th><th>Temperature</th></tr></thead>');
+      }
+      else {
+        $('#motion').text("Motion"+instance.getSensorNumber(instance.selectedNode));
+        $(tableType).html('<thead><tr><th>Time</th><th>Motion Status</th></tr></thead>');
+      }
+      tableData.forEach(function(element, index, array) {
+        $(tableType).append('<tr id = "table-element"><td>' + element[0] + '</td><td>' + element[1] + '</td></tr>');
+      });
 
-
-    $('#temperature-table').show();
-
-
-
-
-    $('#motion-table').html('<thead><tr><th>Time</th><th>Motion Status</th></tr></thead>');
-
-    //populate table with values
-    allMotion.forEach(function(element, index, array) {
-      $('#motion-table').append('<tr id = "table-element"><td>' + element[0] + '</td><td>' + element[1] + '</td></tr>');
-    });
-
-
-    $('#motion-table').show();
-
-
+      $(tableType).show();
+    }
 
   };
 
@@ -236,7 +231,6 @@ function Iot(){
 
   };
 
-  //NOTE this will need to get resolved on the rebase
   this.getSensorNumber = function(sensor) {
     return sensor.match(/(\d+)/)[0];
   };
@@ -275,7 +269,7 @@ axisX:{
     title: "timeline",
     gridThickness: 2
 },
-zoomEnabled: true, 
+zoomEnabled: true,
 axisY: {
     title: "Motion Detected"
 },
